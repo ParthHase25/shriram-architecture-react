@@ -1907,7 +1907,7 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                             <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-4">Project Details</h3>
+                                <h3 class="text-xl font-bold text-white mb-4">Project Details</h3>
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Size:</span>
@@ -1933,7 +1933,7 @@
                             </div>
                             
                             <div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-4">Key Features</h3>
+                                <h3 class="text-xl font-bold text-white mb-4">Key Features</h3>
                                 <ul class="space-y-2">
                                     ${project.details.features.map(feature => 
                                         `<li class="flex items-center">
@@ -2578,7 +2578,7 @@
             });
 
             // Add special architecture cursor for service cards and portfolio items
-            const architectureElements = document.querySelectorAll('.portfolio-item, .group');
+            const architectureElements = document.querySelectorAll('.portfolio-item, .group:not(button)');
             
             architectureElements.forEach(element => {
                 element.addEventListener('mouseenter', () => {
