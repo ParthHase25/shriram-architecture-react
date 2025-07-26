@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { 
-  ExternalLink, 
   Calendar, 
   MapPin, 
   Users, 
   Award,
   Play,
   Pause,
-  RotateCcw,
-  Maximize2,
-  Filter,
   Grid3X3,
-  List,
+  Zap,
   Eye,
-  Zap
+  List
 } from 'lucide-react';
+import ProjectModal from './ProjectModal';
 
 const ProjectsSection = ({ theme }) => {
   const ref = useRef(null);
@@ -25,6 +22,8 @@ const ProjectsSection = ({ theme }) => {
   const [viewMode, setViewMode] = useState('3d'); // '3d', 'grid', 'list'
   const [filter, setFilter] = useState('all');
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Parallax effects
   const scrollY = useMotionValue(0);
@@ -40,50 +39,50 @@ const ProjectsSection = ({ theme }) => {
   const projects = [
     {
       id: 1,
-      title: "Neo-Tech Corporate Tower",
-      category: "commercial",
-      location: "Mumbai, India",
-      year: "2024",
-      area: "150,000 sq ft",
-      team: 25,
+      title: "Luxury Villa - Baner",
+      category: "villa",
+      location: "Baner, Pune",
+      year: "2023",
+      area: "3500 sq ft",
+      team: "4",
       status: "completed",
-      award: "Best Commercial Design 2024",
-      description: "A revolutionary 40-story smart building featuring AI-driven energy management and sustainable design principles",
-      technologies: ["Smart Glass", "IoT Integration", "Solar Panels", "Rainwater Harvesting"],
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070",
+      award: "Best Residential Design 2023",
+      description: "A stunning 4 BHK luxury villa featuring modern architecture with sustainable design elements. This project showcases our expertise in creating elegant living spaces that harmonize with nature.",
+      technologies: ["Smart Home Technology", "Solar Panels", "Rainwater Harvesting", "Modern Kitchen"],
+      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2070",
       color: "from-blue-600 to-cyan-400",
       progress: 100,
-      stats: { sustainability: 95, innovation: 98, efficiency: 92 }
+      stats: { sustainability: 95, innovation: 88, efficiency: 92 }
     },
     {
       id: 2,
-      title: "Harmony Residential Complex",
-      category: "residential",
-      location: "Bangalore, India",
+      title: "Eco Villa - Lonavala",
+      category: "villa",
+      location: "Lonavala, Maharashtra",
       year: "2024",
-      area: "80,000 sq ft",
-      team: 18,
-      status: "construction",
+      area: "4200 sq ft",
+      team: "5",
+      status: "completed",
       award: "Green Building Excellence",
-      description: "Eco-friendly residential complex with integrated community spaces and vertical gardens",
+      description: "Eco-friendly villa complex with integrated vertical gardens and natural ventilation systems. A perfect blend of luxury and environmental consciousness.",
       technologies: ["Green Roofs", "Natural Ventilation", "Solar Water Heating", "Waste Management"],
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2070",
       color: "from-emerald-600 to-teal-400",
-      progress: 75,
+      progress: 100,
       stats: { sustainability: 98, innovation: 85, efficiency: 88 }
     },
     {
       id: 3,
-      title: "Cultural Arts Center",
-      category: "cultural",
-      location: "Delhi, India",
-      year: "2023",
-      area: "120,000 sq ft",
-      team: 22,
+      title: "Garden Villa - Hinjewadi",
+      category: "villa",
+      location: "Hinjewadi, Pune",
+      year: "2022",
+      area: "2500 sq ft",
+      team: "3",
       status: "completed",
       award: "Architectural Innovation Award",
-      description: "Dynamic cultural space featuring fluid architecture and interactive exhibition areas",
-      technologies: ["Parametric Design", "LED Integration", "Acoustic Engineering", "Flexible Spaces"],
+      description: "A beautiful villa that seamlessly blends indoor and outdoor living with extensive gardens and green architecture principles.",
+      technologies: ["Landscape Gardens", "Green Roof", "Natural Materials", "Outdoor Kitchen"],
       image: "https://images.unsplash.com/photo-1600298881974-6be191ceeda1?q=80&w=2026",
       color: "from-purple-600 to-pink-400",
       progress: 100,
@@ -91,29 +90,63 @@ const ProjectsSection = ({ theme }) => {
     },
     {
       id: 4,
-      title: "Healthcare Innovation Hub",
-      category: "healthcare",
-      location: "Chennai, India",
+      title: "Sky Penthouse - Koregaon Park",
+      category: "penthouse",
+      location: "Koregaon Park, Pune",
       year: "2024",
-      area: "200,000 sq ft",
-      team: 30,
-      status: "planning",
-      award: "Healthcare Design Excellence",
-      description: "State-of-the-art medical facility with healing architecture and advanced technology integration",
-      technologies: ["Healing Gardens", "Smart Ventilation", "Antimicrobial Surfaces", "Robotic Systems"],
+      area: "5000 sq ft",
+      team: "4",
+      status: "construction",
+      award: "Luxury Design Excellence",
+      description: "State-of-the-art penthouse with panoramic city views and advanced home automation systems. Features premium finishes and smart living solutions.",
+      technologies: ["Home Automation", "Smart Glass", "Premium Finishes", "City Views"],
       image: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=2070",
       color: "from-orange-600 to-red-400",
-      progress: 25,
+      progress: 75,
       stats: { sustainability: 90, innovation: 92, efficiency: 95 }
+    },
+    {
+      id: 5,
+      title: "Smart Apartment - Wakad",
+      category: "apartment",
+      location: "Wakad, Pune",
+      year: "2023",
+      area: "1200 sq ft",
+      team: "2",
+      status: "completed",
+      award: "Smart Home Innovation",
+      description: "Compact yet luxurious 2 BHK apartment with intelligent space utilization and cutting-edge smart home technology.",
+      technologies: ["IoT Integration", "Space Optimization", "Smart Lighting", "Modular Furniture"],
+      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070",
+      color: "from-indigo-600 to-blue-400",
+      progress: 100,
+      stats: { sustainability: 85, innovation: 95, efficiency: 90 }
+    },
+    {
+      id: 6,
+      title: "Urban Loft - Viman Nagar",
+      category: "loft",
+      location: "Viman Nagar, Pune",
+      year: "2024",
+      area: "1800 sq ft",
+      team: "3",
+      status: "planning",
+      award: "Contemporary Design Award",
+      description: "Modern urban loft with industrial aesthetics and contemporary living spaces. Perfect for the modern professional lifestyle.",
+      technologies: ["Industrial Design", "Open Layouts", "Contemporary Finishes", "Urban Aesthetics"],
+      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053",
+      color: "from-gray-600 to-slate-400",
+      progress: 30,
+      stats: { sustainability: 80, innovation: 88, efficiency: 85 }
     }
   ];
 
   const categories = [
     { id: 'all', name: 'All Projects', count: projects.length },
-    { id: 'commercial', name: 'Commercial', count: projects.filter(p => p.category === 'commercial').length },
-    { id: 'residential', name: 'Residential', count: projects.filter(p => p.category === 'residential').length },
-    { id: 'cultural', name: 'Cultural', count: projects.filter(p => p.category === 'cultural').length },
-    { id: 'healthcare', name: 'Healthcare', count: projects.filter(p => p.category === 'healthcare').length }
+    { id: 'villa', name: 'Villas', count: projects.filter(p => p.category === 'villa').length },
+    { id: 'penthouse', name: 'Penthouses', count: projects.filter(p => p.category === 'penthouse').length },
+    { id: 'apartment', name: 'Apartments', count: projects.filter(p => p.category === 'apartment').length },
+    { id: 'loft', name: 'Lofts', count: projects.filter(p => p.category === 'loft').length }
   ];
 
   const filteredProjects = filter === 'all' 
@@ -126,6 +159,16 @@ const ProjectsSection = ({ theme }) => {
       x: ((e.clientX - rect.left) / rect.width) * 100,
       y: ((e.clientY - rect.top) / rect.height) * 100
     });
+  };
+
+  const openProjectModal = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const closeProjectModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   useEffect(() => {
@@ -176,43 +219,43 @@ const ProjectsSection = ({ theme }) => {
         <div className="relative z-10 h-full flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-              <span className="text-sm font-mono tracking-wider">PROJECT_{project.id.toString().padStart(2, '0')}</span>
+              <div className={`w-3 h-3 ${theme.projects.accent} rounded-full animate-pulse`} />
+              <span className={`text-sm font-mono tracking-wider ${theme.projects.secondary}`}>PROJECT_{project.id.toString().padStart(2, '0')}</span>
             </div>
             <div className="text-right">
-              <div className="text-sm opacity-80">{project.year}</div>
-              <div className="text-xs opacity-60">{project.status.toUpperCase()}</div>
+              <div className={`text-sm ${theme.projects.secondary}`}>{project.year}</div>
+              <div className={`text-xs ${theme.projects.muted}`}>{project.status.toUpperCase()}</div>
             </div>
           </div>
 
           <div className="flex-1">
-            <h3 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+            <h3 className={`text-3xl md:text-4xl font-bold mb-4 leading-tight text-white`}>
               {project.title}
             </h3>
             
-            <p className="text-white/90 text-lg mb-6 leading-relaxed">
+            <p className={`text-white text-lg mb-6 leading-relaxed`}>
               {project.description}
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="space-y-2">
-                <div className="flex items-center space-x-2 text-sm">
+                <div className={`flex items-center space-x-2 text-sm text-white`}>
                   <MapPin className="h-4 w-4" />
                   <span>{project.location}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm">
+                <div className={`flex items-center space-x-2 text-sm text-white`}>
                   <Users className="h-4 w-4" />
-                  <span>{project.team} Team Members</span>
+                  <span>{project.team} BHK</span>
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="flex items-center space-x-2 text-sm">
+                <div className={`flex items-center space-x-2 text-sm text-white`}>
                   <Calendar className="h-4 w-4" />
                   <span>{project.area}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-sm">
+                <div className={`flex items-center space-x-2 text-sm text-white`}>
                   <Award className="h-4 w-4" />
-                  <span className="text-xs">{project.award}</span>
+                  <span className={`text-xs text-white`}>{project.status.charAt(0).toUpperCase() + project.status.slice(1)}</span>
                 </div>
               </div>
             </div>
@@ -221,12 +264,12 @@ const ProjectsSection = ({ theme }) => {
           {/* Progress Bar */}
           <div className="mt-auto">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm">Project Progress</span>
-              <span className="text-sm font-bold">{project.progress}%</span>
+              <span className={`text-sm text-white`}>Project Progress</span>
+              <span className={`text-sm font-bold text-white`}>{project.progress}%</span>
             </div>
-            <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className={`w-full h-2 ${theme.projects.muted} bg-opacity-20 rounded-full overflow-hidden`}>
               <motion.div
-                className="h-full bg-white rounded-full"
+                className={`h-full ${theme.projects.accent} rounded-full`}
                 initial={{ width: 0 }}
                 animate={isActive ? { width: `${project.progress}%` } : {}}
                 transition={{ delay: 0.5, duration: 1 }}
@@ -237,12 +280,12 @@ const ProjectsSection = ({ theme }) => {
 
         {/* Floating Elements */}
         <motion.div
-          className="absolute top-1/4 right-4 w-16 h-16 border border-white/30 rounded-full"
+          className={`absolute top-1/4 right-4 w-16 h-16 border ${theme.projects.border} rounded-full`}
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute bottom-1/4 left-4 w-8 h-8 bg-white/20 rounded-lg"
+          className={`absolute bottom-1/4 left-4 w-8 h-8 ${theme.projects.accent} bg-opacity-20 rounded-lg`}
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 3, repeat: Infinity }}
         />
@@ -275,13 +318,13 @@ const ProjectsSection = ({ theme }) => {
         >
           <div className="flex items-center justify-center space-x-4 mb-6">
             <motion.div 
-              className="w-2 h-2 bg-blue-400 rounded-full"
+              className={`w-2 h-2 ${theme.projects.accent} rounded-full`}
               animate={{ scale: [1, 2, 1], opacity: [1, 0.5, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <span className="text-sm font-mono text-blue-400 tracking-widest">PORTFOLIO_EXPLORER.load()</span>
+            <span className={`text-sm font-mono ${theme.projects.accent} tracking-widest`}>PORTFOLIO_EXPLORER.load()</span>
             <motion.div 
-              className="w-2 h-2 bg-purple-400 rounded-full"
+              className={`w-2 h-2 ${theme.projects.accent} rounded-full`}
               animate={{ scale: [1, 2, 1], opacity: [1, 0.5, 1] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1 }}
             />
@@ -289,12 +332,12 @@ const ProjectsSection = ({ theme }) => {
           
           <h2 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="text-white">Project</span>{' '}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <span className={`bg-gradient-to-r ${theme.projects.gradient} bg-clip-text text-transparent`}>
               Universe
             </span>
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className={`text-xl ${theme.projects.secondary} max-w-3xl mx-auto`}>
             Navigate through our architectural achievements in an immersive 3D experience
           </p>
         </motion.div>
@@ -314,8 +357,8 @@ const ProjectsSection = ({ theme }) => {
                 onClick={() => setFilter(category.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   filter === category.id 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    ? `${theme.projects.accent} text-white` 
+                    : `${theme.projects.card} ${theme.projects.secondary} hover:${theme.projects.hover}`
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -327,7 +370,7 @@ const ProjectsSection = ({ theme }) => {
 
           {/* View Mode Controls */}
           <div className="flex items-center space-x-2">
-            <div className="flex bg-gray-800 rounded-lg p-1">
+            <div className={`flex ${theme.projects.card} rounded-lg p-1`}>
               {[
                 { mode: '3d', icon: Eye, label: '3D View' },
                 { mode: 'grid', icon: Grid3X3, label: 'Grid' },
@@ -338,8 +381,8 @@ const ProjectsSection = ({ theme }) => {
                   onClick={() => setViewMode(view.mode)}
                   className={`p-2 rounded-md transition-colors ${
                     viewMode === view.mode 
-                      ? 'bg-blue-600 text-white' 
-                      : 'text-gray-400 hover:text-white'
+                      ? `${theme.projects.accent} text-white` 
+                      : `${theme.projects.muted} hover:text-white`
                   }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -352,7 +395,7 @@ const ProjectsSection = ({ theme }) => {
             {viewMode === '3d' && (
               <motion.button
                 onClick={() => setIsAutoplay(!isAutoplay)}
-                className="p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white transition-colors"
+                className={`p-2 rounded-lg ${theme.projects.card} ${theme.projects.secondary} hover:text-white transition-colors`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -410,33 +453,142 @@ const ProjectsSection = ({ theme }) => {
               {filteredProjects.map((project, index) => (
                 <motion.div
                   key={project.id}
-                  className="bg-gray-800 rounded-2xl overflow-hidden group cursor-pointer"
+                  className={`${theme.projects.card} rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border border-white/10`}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileHover={{ y: -15, scale: 1.03 }}
+                  onClick={() => openProjectModal(project)}
                 >
-                  <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 p-6 relative overflow-hidden">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-20`} />
-                    <div className="relative z-10">
-                      <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                      <p className="text-gray-300 text-sm">{project.location} • {project.year}</p>
+                  {/* Image Header */}
+                  <div className="relative aspect-video overflow-hidden">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-80`} />
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-black/20" />
+                    
+                    {/* Status Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
+                        project.status === 'completed' 
+                          ? 'bg-green-500/90 text-white' 
+                          : project.status === 'construction'
+                          ? 'bg-yellow-500/90 text-white'
+                          : 'bg-blue-500/90 text-white'
+                      }`}>
+                        {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                      </span>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <p className="text-gray-300 mb-4">{project.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-blue-400">{project.category}</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full bg-gradient-to-r ${project.color} rounded-full`}
-                            style={{ width: `${project.progress}%` }}
-                          />
+
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm text-white border border-white/30">
+                        {project.category.charAt(0).toUpperCase() + project.category.slice(1)}
+                      </span>
+                    </div>
+
+                    {/* Overlay Content */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="flex items-center space-x-2 text-white/90 text-sm mb-2">
+                          <MapPin className="h-4 w-4" />
+                          <span>{project.location}</span>
                         </div>
-                        <span className="text-xs text-gray-400">{project.progress}%</span>
+                        <div className="flex items-center space-x-4 text-white/80 text-xs">
+                          <div className="flex items-center space-x-1">
+                            <Calendar className="h-3 w-3" />
+                            <span>{project.year}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Award className="h-3 w-3" />
+                            <span>{project.team} BHK</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="p-6">
+                    {/* Title and Basic Info */}
+                    <div className="mb-4">
+                      <h3 className="text-xl font-bold mb-2 text-white group-hover:text-blue-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      <div className="flex items-center justify-between text-sm text-white/70">
+                        <span className="flex items-center space-x-1">
+                          <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                          <span>{project.area}</span>
+                        </span>
+                        <span className="text-blue-400 font-medium">{project.year}</span>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-white/80 text-sm leading-relaxed mb-4 line-clamp-3">
+                      {project.description}
+                    </p>
+
+                    {/* Technologies */}
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-1">
+                        {project.technologies.slice(0, 3).map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="px-2 py-1 text-xs rounded-full bg-white/10 text-white/70 border border-white/20"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                        {project.technologies.length > 3 && (
+                          <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                            +{project.technologies.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Progress and Stats */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-white/60">Project Progress</span>
+                        <span className="text-xs font-bold text-white">{project.progress}%</span>
+                      </div>
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                          className={`h-full bg-gradient-to-r ${project.color} rounded-full`}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${project.progress}%` }}
+                          transition={{ delay: index * 0.1 + 0.5, duration: 1 }}
+                        />
+                      </div>
+                      
+                      {/* Mini Stats */}
+                      <div className="grid grid-cols-3 gap-2 pt-2">
+                        {Object.entries(project.stats).map(([key, value]) => (
+                          <div key={key} className="text-center">
+                            <div className="text-xs font-bold text-white">{value}%</div>
+                            <div className="text-xs text-white/50 capitalize">{key}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* View Details Button */}
+                    <motion.button
+                      className="w-full mt-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-400 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 hover:shadow-lg"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openProjectModal(project);
+                      }}
+                    >
+                      View Details
+                    </motion.button>
                   </div>
                 </motion.div>
               ))}
@@ -452,10 +604,10 @@ const ProjectsSection = ({ theme }) => {
           className="grid grid-cols-1 md:grid-cols-4 gap-8"
         >
           {[
-            { label: "Total Projects", value: "200+", icon: Grid3X3, color: "text-blue-400" },
-            { label: "Countries", value: "5", icon: MapPin, color: "text-emerald-400" },
-            { label: "Awards Won", value: "25+", icon: Award, color: "text-purple-400" },
-            { label: "Innovation Score", value: "95%", icon: Zap, color: "text-orange-400" }
+            { label: "Total Projects", value: "200+", icon: Grid3X3, color: theme.projects.accent },
+            { label: "Countries", value: "5", icon: MapPin, color: theme.projects.accent },
+            { label: "Awards Won", value: "25+", icon: Award, color: theme.projects.accent },
+            { label: "Innovation Score", value: "95%", icon: Zap, color: theme.projects.accent }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -466,7 +618,7 @@ const ProjectsSection = ({ theme }) => {
               whileHover={{ scale: 1.05 }}
             >
               <div className="flex items-center justify-center mb-4">
-                <div className="p-4 bg-gray-800 rounded-2xl group-hover:bg-gray-700 transition-colors">
+                <div className={`p-4 ${theme.projects.card} rounded-2xl group-hover:${theme.projects.hover} transition-colors`}>
                   <stat.icon className={`h-8 w-8 ${stat.color}`} />
                 </div>
               </div>
@@ -483,11 +635,21 @@ const ProjectsSection = ({ theme }) => {
               >
                 {stat.value}
               </motion.div>
-              <p className="text-gray-400">{stat.label}</p>
+              <p className={theme.projects.muted}>{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>
       </div>
+
+      {/* Project Modal */}
+      {isModalOpen && selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={closeProjectModal}
+          theme={theme}
+        />
+      )}
     </section>
   );
 };

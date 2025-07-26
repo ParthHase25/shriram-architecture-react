@@ -1,13 +1,20 @@
 {
   "name": "shriram-architecture-react",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Revolutionary architectural design website for Shriram Architecture",
+  "author": "Shriram Architecture",
+  "license": "MIT",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vite build",
+    "preview": "vite preview --open",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --ext js,jsx --fix",
+    "clean": "rimraf dist",
+    "start": "npm run dev",
+    "check-unused": "npx depcheck"
   },
   "dependencies": {
     "react": "^18.2.0",
