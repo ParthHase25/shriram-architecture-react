@@ -249,9 +249,111 @@
             transform: translateX(-5px);
             background: rgba(102, 126, 234, 0.9);
         }
+        
+        /* ============================================
+           LANDING INTRO ANIMATIONS
+           ============================================ */
+        
+        #landingIntro {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+        }
+        
+        #logoAnimation {
+            filter: drop-shadow(0 25px 50px rgba(139, 92, 246, 0.3));
+        }
+        
+        #name1, #name2 {
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        #loadingDots {
+            position: relative;
+        }
+        
+        #loadingDots::after {
+            content: '...';
+            animation: loadingDots 1.5s infinite;
+        }
+        
+        @keyframes loadingDots {
+            0%, 20% { opacity: 0; }
+            40% { opacity: 0.5; }
+            60% { opacity: 1; }
+            80%, 100% { opacity: 0; }
+        }
+        
+        /* Counter Animation Styles */
+        .counter {
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .counter::after {
+            content: '+';
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .counter:hover::after {
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
+    <!-- ============================================
+         ANIMATED LANDING INTRO SCREEN
+         ============================================ -->
+    <div id="landingIntro" class="fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <!-- Animated Background Particles -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+            <div class="absolute top-3/4 right-1/4 w-48 h-48 bg-purple-500/20 rounded-full blur-xl animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute bottom-1/4 left-1/3 w-24 h-24 bg-pink-500/20 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <!-- Main Animation Container -->
+        <div class="relative z-10 text-center">
+            <!-- Logo Animation -->
+            <div id="logoAnimation" class="mb-8 opacity-0">
+                <div class="inline-flex items-center justify-center w-32 h-32 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 p-1 shadow-2xl">
+                    <div class="w-full h-full bg-slate-900 rounded-xl flex items-center justify-center">
+                        <span class="text-4xl font-bold text-white font-display">SA</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Company Name Animation -->
+            <div id="companyName" class="space-y-4 opacity-0">
+                <h1 class="text-6xl md:text-7xl font-bold text-white font-display tracking-tight">
+                    <span id="name1" class="block opacity-0">Shriram</span>
+                    <span id="name2" class="block opacity-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Architecture</span>
+                </h1>
+                
+                <!-- Tagline Animation -->
+                <div id="tagline" class="opacity-0">
+                    <p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide">
+                        Innovative Design Studio • Pune
+                    </p>
+                    <div class="mt-6 w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+                </div>
+                
+                <!-- Loading Animation -->
+                <div id="loadingText" class="mt-8 opacity-0">
+                    <p class="text-sm text-gray-400 tracking-widest uppercase">
+                        <span id="loadingDots">Creating Excellence</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Website Content (Initially Hidden) -->
+    <div id="mainContent" class="opacity-0">
+    
     <!-- Scroll Progress Indicator -->
     <div class="scroll-indicator" id="scrollIndicator"></div>
     
@@ -1769,6 +1871,175 @@
                 closeContactModal();
             }
         });
+    </script>
+    
+    </div> <!-- End of mainContent -->
+
+    <!-- ============================================
+         LANDING INTRO ANIMATION SCRIPT
+         ============================================ -->
+    <script>
+        // Landing Intro Animation Timeline
+        window.addEventListener('load', function() {
+            const tl = gsap.timeline();
+            
+            // Step 1: Logo Animation (fade in and scale)
+            tl.to("#logoAnimation", {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                ease: "back.out(1.7)"
+            })
+            
+            // Step 2: Company Name Animation (staggered)
+            .to("#companyName", {
+                opacity: 1,
+                duration: 0.5
+            }, "-=0.3")
+            
+            .to("#name1", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            }, "-=0.2")
+            
+            .to("#name2", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            }, "-=0.4")
+            
+            // Step 3: Tagline Animation
+            .to("#tagline", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, "-=0.2")
+            
+            // Step 4: Loading Text
+            .to("#loadingText", {
+                opacity: 1,
+                duration: 0.5
+            })
+            
+            // Step 5: Animate loading dots
+            .to("#loadingDots", {
+                opacity: 0.5,
+                duration: 0.5,
+                repeat: 2,
+                yoyo: true,
+                ease: "power2.inOut"
+            })
+            
+            // Step 6: Final transition to main content
+            .to("#landingIntro", {
+                opacity: 0,
+                scale: 1.1,
+                duration: 1,
+                ease: "power2.inOut",
+                delay: 0.5
+            })
+            
+            .set("#landingIntro", {
+                display: "none"
+            })
+            
+            .to("#mainContent", {
+                opacity: 1,
+                duration: 0.8,
+                ease: "power2.out",
+                onComplete: function() {
+                    // Initialize AOS after intro animation
+                    AOS.init({
+                        duration: 800,
+                        easing: 'ease-out-cubic',
+                        once: true,
+                        offset: 100
+                    });
+                    
+                    // Initialize other animations
+                    initializeScrollAnimations();
+                }
+            }, "-=0.5");
+            
+            // Set initial states
+            gsap.set("#logoAnimation", { opacity: 0, scale: 0.5 });
+            gsap.set("#name1, #name2", { opacity: 0, y: 50 });
+            gsap.set("#tagline, #loadingText", { opacity: 0, y: 30 });
+        });
+        
+        // Function to initialize scroll animations (called after intro)
+        function initializeScrollAnimations() {
+            // Scroll progress indicator
+            window.addEventListener('scroll', function() {
+                const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                document.getElementById('scrollIndicator').style.width = scrolled + '%';
+            });
+            
+            // Navbar background on scroll
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass', 'bg-black/30');
+                } else {
+                    navbar.classList.remove('glass', 'bg-black/30');
+                }
+            });
+            
+            // Initialize animated counters
+            initializeCounters();
+        }
+        
+        // Animated Counter Function with GSAP for smooth animation
+        function initializeCounters() {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach((counter, index) => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                
+                // Create a temporary object to animate
+                const obj = { value: 0 };
+                
+                // GSAP animation for smooth counting
+                gsap.to(obj, {
+                    value: target,
+                    duration: 2.5,
+                    delay: index * 0.2, // Stagger the animations
+                    ease: "power2.out",
+                    onUpdate: function() {
+                        counter.textContent = Math.floor(obj.value);
+                    },
+                    onComplete: function() {
+                        counter.textContent = target;
+                        // Add a subtle scale effect when complete
+                        gsap.to(counter, {
+                            scale: 1.1,
+                            duration: 0.2,
+                            yoyo: true,
+                            repeat: 1,
+                            ease: "power2.inOut"
+                        });
+                    }
+                });
+                
+                // Add a glow effect during counting
+                gsap.to(counter, {
+                    textShadow: "0 0 20px rgba(102, 126, 234, 0.5)",
+                    duration: 2.5,
+                    delay: index * 0.2,
+                    ease: "power2.out",
+                    onComplete: function() {
+                        gsap.to(counter, {
+                            textShadow: "0 0 0px rgba(102, 126, 234, 0)",
+                            duration: 0.5
+                        });
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
