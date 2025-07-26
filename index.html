@@ -49,6 +49,47 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
+        /* ============================================
+           CUSTOM CURSOR STYLES
+           ============================================ */
+        
+        
+        
+        /* Custom cursor for different elements */
+        a, button, .portfolio-item, .nav-link {
+            cursor: none;
+        }
+        
+        .cursor-text {
+            cursor: none;
+        }
+        
+        .cursor-pointer {
+            cursor: none;
+        }
+        
+        /* Architecture-themed cursor for special elements */
+        .custom-cursor.architecture {
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>') no-repeat center;
+            background-size: contain;
+            background-color: rgba(102, 126, 234, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        /* Hide cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            * {
+                cursor: auto !important;
+            }
+            .custom-cursor,
+            .custom-cursor-follower {
+                display: none !important;
+            }
+        }
+        /* cursor style end*/
         .animated { 
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
         }
@@ -301,9 +342,209 @@
         .counter:hover::after {
             opacity: 0.7;
         }
+        
+        /* ============================================
+           INTERACTIVE BACKGROUND EFFECTS
+           ============================================ */
+        
+        /* Animated Background Canvas */
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8;
+        }
+        
+        /* Mouse Ripple Effect */
+        @keyframes ripple-effect {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .mouse-ripple {
+            position: fixed;
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: ripple-effect 0.6s ease-out forwards;
+        }
+        
+        /* Floating Geometric Shapes */
+        .floating-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+            animation: float-around 20s infinite linear;
+        }
+        
+        .floating-shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #667eea;
+        }
+        
+        .floating-shape.circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        
+        .floating-shape.square {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            transform: rotate(45deg);
+        }
+        
+        @keyframes float-around {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        /* Parallax Background Layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 120%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .parallax-layer-1 {
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            animation: parallax-drift-1 30s infinite ease-in-out;
+        }
+        
+        .parallax-layer-2 {
+            background: radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.08) 0%, transparent 50%);
+            animation: parallax-drift-2 25s infinite ease-in-out;
+        }
+        
+        .parallax-layer-3 {
+            background: radial-gradient(circle at 60% 80%, rgba(240, 147, 251, 0.06) 0%, transparent 50%);
+            animation: parallax-drift-3 35s infinite ease-in-out;
+        }
+        
+        @keyframes parallax-drift-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, -30px) scale(1.1); }
+        }
+        
+        @keyframes parallax-drift-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -20px) scale(0.9); }
+        }
+        
+        @keyframes parallax-drift-3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-15px, 25px) scale(1.05); }
+        }
+        
+        /* Enhanced Section Backgrounds */
+        .section-bg-interactive {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-bg-interactive::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(102, 126, 234, 0.05) 50%, 
+                transparent 70%);
+            animation: section-bg-move 20s infinite linear;
+            pointer-events: none;
+        }
+        
+        @keyframes section-bg-move {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Mouse Follower */
+        .mouse-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            transition: transform 0.1s ease-out;
+            mix-blend-mode: screen;
+        }
+        
+        /* Interactive Hover Effects */
+        .interactive-hover {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .interactive-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        
+        .interactive-hover:hover::before {
+            opacity: 1;
+        }
+        
+        .interactive-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
     </style>
 </head>
 <body>
+    <!-- ============================================
+         INTERACTIVE BACKGROUND LAYERS
+         ============================================ -->
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer parallax-layer-1"></div>
+    <div class="parallax-layer parallax-layer-2"></div>
+    <div class="parallax-layer parallax-layer-3"></div>
+    
+    <!-- Mouse Follower -->
+    <div class="mouse-follower" id="mouseFollower"></div>
+    
+    <!-- Interactive Particles Canvas -->
+    <canvas id="interactiveCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.7;"></canvas>
+    
     <!-- ============================================
          ANIMATED LANDING INTRO SCREEN
          ============================================ -->
@@ -357,6 +598,10 @@
     <!-- Scroll Progress Indicator -->
     <div class="scroll-indicator" id="scrollIndicator"></div>
     
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-follower"></div>
+
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -480,11 +725,11 @@
     </section>
     
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-50">
+    <section id="about" class="py-20 bg-gray-50 section-bg-interactive">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <!-- Content -->
-                <div data-aos="fade-right">
+                <div data-aos="fade-right" class="interactive-hover">
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-8 font-display">
                         About Shriram Architecture
                     </h2>
@@ -744,7 +989,7 @@
         </div>
 
     <!-- Services Section -->
-    <section id="services" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="services" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50 section-bg-interactive">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Header -->
             <div class="text-center mb-16" data-aos="fade-up">
@@ -1714,6 +1959,7 @@
                 `;
                 
                 modal.classList.remove('hidden');
+                modal.classList.add('flex');
                 document.body.style.overflow = 'hidden';
                 
                 // Animate modal opening
@@ -1735,6 +1981,7 @@
                 duration: 0.3,
                 onComplete: () => {
                     modal.classList.add('hidden');
+                    modal.classList.remove('flex');
                     document.body.style.overflow = 'auto';
                 }
             });
@@ -1744,6 +1991,7 @@
         function openContactModal() {
             const modal = document.getElementById('contactModal');
             modal.classList.remove('hidden');
+            modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
             
             gsap.fromTo(modal, 
@@ -1763,6 +2011,7 @@
                 duration: 0.3,
                 onComplete: () => {
                     modal.classList.add('hidden');
+                    modal.classList.remove('flex');
                     document.body.style.overflow = 'auto';
                 }
             });
@@ -1808,6 +2057,9 @@
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎉 Shriram Architecture website loaded successfully!');
+            
+            // Initialize custom cursor
+            initializeCustomCursor();
             
             // Initialize form handlers
             handleFormSubmission('contactForm');
@@ -1870,6 +2122,236 @@
                 closeProjectModal();
                 closeContactModal();
             }
+        });
+    </script>
+    
+    <!-- ============================================
+         INTERACTIVE BACKGROUND JAVASCRIPT
+         ============================================ -->
+    <script>
+        // Interactive Background System
+        class InteractiveBackground {
+            constructor() {
+                this.canvas = document.getElementById('interactiveCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.mouseFollower = document.getElementById('mouseFollower');
+                
+                this.init();
+                this.createParticles();
+                this.setupEventListeners();
+                this.animate();
+                this.createFloatingShapes();
+            }
+            
+            init() {
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+            
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = window.innerWidth < 768 ? 50 : 100;
+                this.particles = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 2 + 0.5,
+                        speedX: (Math.random() - 0.5) * 1,
+                        speedY: (Math.random() - 0.5) * 1,
+                        opacity: Math.random() * 0.5 + 0.2,
+                        color: this.getRandomColor(),
+                        trail: []
+                    });
+                }
+            }
+            
+            getRandomColor() {
+                const colors = [
+                    'rgba(102, 126, 234, 0.6)',
+                    'rgba(118, 75, 162, 0.6)',
+                    'rgba(240, 147, 251, 0.6)',
+                    'rgba(245, 87, 108, 0.6)'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            setupEventListeners() {
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                    
+                    // Update mouse follower
+                    if (this.mouseFollower) {
+                        this.mouseFollower.style.left = (e.clientX - 10) + 'px';
+                        this.mouseFollower.style.top = (e.clientY - 10) + 'px';
+                    }
+                    
+                    // Create ripple effect
+                    this.createRipple(e.clientX, e.clientY);
+                });
+                
+                // Add click effects
+                document.addEventListener('click', (e) => {
+                    this.createClickEffect(e.clientX, e.clientY);
+                });
+            }
+            
+            createRipple(x, y) {
+                const ripple = document.createElement('div');
+                ripple.className = 'mouse-ripple';
+                ripple.style.cssText = `
+                    position: fixed;
+                    left: ${x - 25}px;
+                    top: ${y - 25}px;
+                    width: 50px;
+                    height: 50px;
+                    border: 2px solid rgba(102, 126, 234, 0.4);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 2;
+                `;
+                
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
+            
+            createClickEffect(x, y) {
+                // Create burst of particles on click
+                for (let i = 0; i < 10; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        size: Math.random() * 3 + 1,
+                        speedX: (Math.random() - 0.5) * 8,
+                        speedY: (Math.random() - 0.5) * 8,
+                        opacity: 1,
+                        color: this.getRandomColor(),
+                        life: 60,
+                        trail: []
+                    });
+                }
+            }
+            
+            createFloatingShapes() {
+                setInterval(() => {
+                    if (Math.random() < 0.3) {
+                        const shapes = ['triangle', 'circle', 'square'];
+                        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                        
+                        const element = document.createElement('div');
+                        element.className = `floating-shape ${shape}`;
+                        element.style.left = Math.random() * window.innerWidth + 'px';
+                        element.style.animationDuration = (15 + Math.random() * 10) + 's';
+                        element.style.animationDelay = Math.random() * 2 + 's';
+                        
+                        document.body.appendChild(element);
+                        
+                        setTimeout(() => element.remove(), 25000);
+                    }
+                }, 3000);
+            }
+            
+            updateParticles() {
+                this.particles.forEach((particle, index) => {
+                    // Update position
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Mouse interaction
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        const force = (100 - distance) / 100;
+                        particle.x -= dx * force * 0.02;
+                        particle.y -= dy * force * 0.02;
+                    }
+                    
+                    // Boundary check
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.speedY *= -1;
+                    
+                    // Keep particles in bounds
+                    particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+                    particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
+                    
+                    // Handle particle life
+                    if (particle.life !== undefined) {
+                        particle.life--;
+                        particle.opacity = particle.life / 60;
+                        if (particle.life <= 0) {
+                            this.particles.splice(index, 1);
+                        }
+                    }
+                });
+            }
+            
+            drawParticles() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Draw connections between nearby particles
+                    this.particles.forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120 && particle !== otherParticle) {
+                            this.ctx.strokeStyle = `rgba(102, 126, 234, ${0.1 * (1 - distance / 120)})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(otherParticle.x, otherParticle.y);
+                            this.ctx.stroke();
+                        }
+                    });
+                    
+                    this.ctx.restore();
+                });
+            }
+            
+            animate() {
+                this.updateParticles();
+                this.drawParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize interactive background after intro animation
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                new InteractiveBackground();
+            }, 7000); // Start after intro animation
+        });
+        
+        // Parallax effect for mouse movement
+        document.addEventListener('mousemove', function(e) {
+            const layers = document.querySelectorAll('.parallax-layer');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            layers.forEach((layer, index) => {
+                const speed = (index + 1) * 0.5;
+                const moveX = (x - 0.5) * speed * 30;
+                const moveY = (y - 0.5) * speed * 30;
+                layer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
         });
     </script>
     
@@ -2038,6 +2520,94 @@
                         });
                     }
                 });
+            });
+        }
+
+        // Custom Cursor Functionality
+        function initializeCustomCursor() {
+            // Only initialize on devices that support hover
+            if (!window.matchMedia("(hover: hover)").matches) {
+                return;
+            }
+
+            const cursor = document.querySelector('.custom-cursor');
+            const follower = document.querySelector('.custom-cursor-follower');
+            
+            if (!cursor || !follower) return;
+
+            let mouseX = 0;
+            let mouseY = 0;
+            let followerX = 0;
+            let followerY = 0;
+
+            // Update cursor position
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            });
+
+            // Smooth follower animation
+            function animateFollower() {
+                const speed = 0.2;
+                followerX += (mouseX - followerX) * speed;
+                followerY += (mouseY - followerY) * speed;
+                
+                follower.style.left = followerX + 'px';
+                follower.style.top = followerY + 'px';
+                
+                requestAnimationFrame(animateFollower);
+            }
+            animateFollower();
+
+            // Add hover effects for different elements
+            const hoverElements = document.querySelectorAll('a, button, .portfolio-item, .nav-link, [onclick]');
+            
+            hoverElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                    follower.classList.add('hover');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                    follower.classList.remove('hover');
+                });
+            });
+
+            // Add special architecture cursor for service cards and portfolio items
+            const architectureElements = document.querySelectorAll('.portfolio-item, .group');
+            
+            architectureElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.classList.add('architecture');
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('architecture');
+                });
+            });
+
+            // Click animation
+            document.addEventListener('mousedown', () => {
+                cursor.classList.add('click');
+            });
+
+            document.addEventListener('mouseup', () => {
+                cursor.classList.remove('click');
+            });
+
+            // Hide cursor when leaving window
+            document.addEventListener('mouseleave', () => {
+                cursor.style.opacity = '0';
+                follower.style.opacity = '0';
+            });
+
+            document.addEventListener('mouseenter', () => {
+                cursor.style.opacity = '1';
+                follower.style.opacity = '1';
             });
         }
     </script>
